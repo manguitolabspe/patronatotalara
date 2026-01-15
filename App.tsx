@@ -12,10 +12,15 @@ import Contacto from './pages/Contacto';
 export type PageId = 'home' | 'nosotros' | 'ecosistema' | 'patrimonio' | 'gastronomia' | 'contacto';
 
 const App: React.FC = () => {
+  // El estado inicial es SIEMPRE 'home' para que sea la cara de la web al entrar
   const [currentPage, setCurrentPage] = useState<PageId>('home');
 
   useEffect(() => {
-    const syncHash = () => {
+    // Al montar el componente, nos aseguramos de estar en el inicio
+    // Sin manipular el historial del navegador para evitar errores de pantalla blanca
+    window.scrollTo(0, 0);
+
+    const handleHashChange = () => {
       const hash = window.location.hash;
       if (hash === '#nosotros-page') setCurrentPage('nosotros');
       else if (hash === '#ecosistema-page') setCurrentPage('ecosistema');
@@ -26,15 +31,14 @@ const App: React.FC = () => {
       window.scrollTo(0, 0);
     };
 
-    window.addEventListener('hashchange', syncHash);
-    syncHash();
-    return () => window.removeEventListener('hashchange', syncHash);
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
   }, []);
 
   const navigateTo = (page: PageId) => {
     setCurrentPage(page);
     const hashMap: Record<PageId, string> = {
-      home: '',
+      home: '#',
       nosotros: '#nosotros-page',
       ecosistema: '#ecosistema-page',
       patrimonio: '#patrimonio-page',
@@ -47,20 +51,21 @@ const App: React.FC = () => {
 
   const renderCurrentPage = () => {
     switch (currentPage) {
-      case 'nosotros': return <Nosotros key="nosotros" />;
-      case 'ecosistema': return <Ecosistema key="ecosistema" />;
-      case 'patrimonio': return <Patrimonio key="patrimonio" />;
-      case 'gastronomia': return <Gastronomia key="gastronomia" />;
-      case 'contacto': return <Contacto key="contacto" />;
-      default: return <Home key="home" />;
+      case 'nosotros': return <Nosotros />;
+      case 'ecosistema': return <Ecosistema />;
+      case 'patrimonio': return <Patrimonio />;
+      case 'gastronomia': return <Gastronomia />;
+      case 'contacto': return <Contacto />;
+      default: return <Home />;
     }
   };
 
   return (
-    <div className="flex flex-col min-h-screen font-sans selection:bg-teal-500 selection:text-white">
+    <div className="flex flex-col min-h-screen bg-white font-sans selection:bg-teal-500 selection:text-white overflow-x-hidden">
       <Header onNavigate={navigateTo} currentPage={currentPage} />
-      <main className="flex-grow pt-[72px] md:pt-[88px] overflow-hidden">
-        <div className="page-fade-in">
+      {/* El pt-[72px] compensa la altura del header fijo */}
+      <main className="flex-grow pt-[72px] md:pt-[88px] relative overflow-x-hidden">
+        <div className="page-fade-in w-full">
           {renderCurrentPage()}
         </div>
       </main>
