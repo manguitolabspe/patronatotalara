@@ -12,12 +12,9 @@ import Contacto from './pages/Contacto';
 export type PageId = 'home' | 'nosotros' | 'ecosistema' | 'patrimonio' | 'gastronomia' | 'contacto';
 
 const App: React.FC = () => {
-  // El estado inicial es SIEMPRE 'home' para que sea la cara de la web al entrar
   const [currentPage, setCurrentPage] = useState<PageId>('home');
 
   useEffect(() => {
-    // Al montar el componente, nos aseguramos de estar en el inicio
-    // Sin manipular el historial del navegador para evitar errores de pantalla blanca
     window.scrollTo(0, 0);
 
     const handleHashChange = () => {
@@ -56,15 +53,14 @@ const App: React.FC = () => {
       case 'patrimonio': return <Patrimonio />;
       case 'gastronomia': return <Gastronomia />;
       case 'contacto': return <Contacto />;
-      default: return <Home />;
+      default: return <Home onNavigate={navigateTo} />;
     }
   };
 
   return (
     <div className="flex flex-col min-h-screen bg-white font-sans selection:bg-teal-500 selection:text-white overflow-x-hidden">
       <Header onNavigate={navigateTo} currentPage={currentPage} />
-      {/* El pt-[72px] compensa la altura del header fijo */}
-      <main className="flex-grow pt-[72px] md:pt-[88px] relative overflow-x-hidden">
+      <main className="flex-grow pt-[80px] md:pt-[88px] relative overflow-x-hidden">
         <div className="page-fade-in w-full">
           {renderCurrentPage()}
         </div>

@@ -5,19 +5,22 @@ import Impact from '../components/Impact';
 import ViveTalaraSection from '../components/ViveTalaraSection';
 import Activities from '../components/Activities';
 import Gastronomy from '../components/Gastronomy';
+import { PageId } from '../App';
 
-const Home: React.FC = () => {
+interface HomeProps {
+  onNavigate: (page: PageId) => void;
+}
+
+const Home: React.FC<HomeProps> = ({ onNavigate }) => {
   return (
     <div className="w-full overflow-x-hidden">
-      <Hero />
+      <Hero onNavigate={onNavigate} />
       <Impact />
       <ViveTalaraSection />
       <Activities />
       <Gastronomy />
       
-      {/* Sección: Talara Futuro - Optimizada para Responsividad */}
       <section className="py-24 md:py-48 bg-slate-950 text-white relative overflow-hidden">
-        {/* Capas de diseño decorativas con contención */}
         <div className="absolute inset-0 z-0 opacity-10 md:opacity-20 pointer-events-none" style={{ backgroundImage: 'radial-gradient(#1da1d1 0.5px, transparent 0.5px)', backgroundSize: '24px 24px' }}></div>
         <div className="absolute top-0 left-0 w-64 h-64 md:w-[500px] md:h-[500px] bg-[#1da1d1]/10 rounded-full blur-[80px] md:blur-[120px] -translate-x-1/2 -translate-y-1/2"></div>
         <div className="absolute bottom-0 right-0 w-64 h-64 md:w-[500px] md:h-[500px] bg-[#47a44b]/10 rounded-full blur-[80px] md:blur-[120px] translate-x-1/2 translate-y-1/2"></div>
@@ -51,9 +54,6 @@ const Home: React.FC = () => {
             </div>
           </div>
         </div>
-
-        {/* Decoración de borde inferior */}
-        <div className="absolute bottom-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
       </section>
     </div>
   );
